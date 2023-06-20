@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<aside id="sidebar" class="sidebar rounded">
+<aside id="sidebar" class="sidebar rounded" style="box-shadow: 0px 0 30px rgb(1 41 112 / 10%) !important;">
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item"><a class="nav-link " href="${pageContext.request.contextPath}/clothes"> <i
                 class="bi bi-grid"></i> <span>Todos Los Productos</span> </a></li>

@@ -21,7 +21,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/team.jsp">Equipo</a>
                 </li>
-
                 <c:choose>
                     <c:when test="${sessionScope.usuario == null}">
                         <li class="nav-item">
@@ -44,6 +43,9 @@
                         </li>
                     </c:otherwise>
                 </c:choose>
+                <li class="nav-item">
+                    <a class="nav-link" style="font-size: large !important;" href="${pageContext.request.contextPath}/cart?action=view" ><i class="bi bi-cart-fill"></i></a>
+                </li>
             </ul>
         </div>
     </div>

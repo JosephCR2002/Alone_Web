@@ -1,7 +1,11 @@
 package com.alone.webapp.models;
 
+import com.google.gson.annotations.Expose;
+
 public class Categoria {
+    @Expose
     private Integer id;
+    @Expose
     private String descripcion;
     private int genero;
     private String img;

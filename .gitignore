@@ -1,0 +1,6 @@
+# production files
+target
+
+# IDE files
+nb-configuration.xml
+.idea

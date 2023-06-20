@@ -45,10 +45,17 @@ public class ClothesServlet extends HttpServlet {
                         ProductosServlet.sendInternalError(response, e);
                     }
                     break;
+                case "bestSellers":
+                    try {
+                        this.viewByBestSellers(request, response);
+                    } catch (SQLException | ClassNotFoundException | ServletException | IOException e) {
+                        ProductosServlet.sendInternalError(response, e);
+                    }
+                    break;
                 default:
                     try {
                         this.defaultAction(request, response);
-                    } catch (SQLException | ClassNotFoundException e) {
+                    } catch (SQLException | ClassNotFoundException | ServletException | IOException e) {
                         ProductosServlet.sendInternalError(response, e);
                     }
                     break;
@@ -89,7 +96,7 @@ public class ClothesServlet extends HttpServlet {
 
         String title = "";
 
-        switch (id){
+        switch (id) {
             case 0:
                 title = "Moda Hombres";
                 break;
@@ -126,5 +133,17 @@ public class ClothesServlet extends HttpServlet {
         request.setAttribute("p", producto);
 
         getServletContext().getRequestDispatcher("/WEB-INF/user/products/product.jsp").forward(request, response);
+    }
+
+    private void viewByBestSellers(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ClassNotFoundException, ServletException, IOException {
+        List<Producto> productos = productoDAO.findBestSellers();
+        req.setAttribute("productos", productos);
+
+        List<Categoria> categorias = categoriaDAO.findAll();
+        req.setAttribute("categorias", categorias);
+
+        req.setAttribute("title", "Nuestros Productos M&aacute;s Comprados");
+
+        getServletContext().getRequestDispatcher("/WEB-INF/user/products/products.jsp").forward(req, resp);
     }
 }

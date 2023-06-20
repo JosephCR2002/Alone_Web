@@ -4,7 +4,6 @@ import com.alone.webapp.models.Categoria;
 import com.alone.webapp.models.Producto;
 import com.alone.webapp.util.Conexion;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,7 @@ public class ProductoDAO implements DAO<Producto> {
     public List<Producto> findAll() throws SQLException, ClassNotFoundException {
         Connection cn = Conexion.getConexion();
         List<Producto> productos = new ArrayList<>();
-        try (Statement stmt = cn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT p.*, c.categoria_descripcion from productos p inner join categorias c on p.categoria_id = c.categoria_id order by p.producto_fecha_creacion desc")) {
+        try (Statement stmt = cn.createStatement(); ResultSet rs = stmt.executeQuery("SELECT p.*, c.categoria_descripcion from productos p inner join categorias c on p.categoria_id = c.categoria_id order by p.producto_fecha_creacion desc")) {
             while (rs.next()) {
                 Producto producto = getProducto(rs);
                 productos.add(producto);
@@ -28,8 +26,25 @@ public class ProductoDAO implements DAO<Producto> {
     public List<Producto> findByGender(int genero) throws SQLException, ClassNotFoundException {
         Connection cn = Conexion.getConexion();
         List<Producto> productos = new ArrayList<>();
-        try (PreparedStatement stmt = cn.prepareStatement("SELECT p.*, c.categoria_descripcion from productos p inner join categorias c on p.categoria_id = c.categoria_id where c.categoria_genero=? order by p.producto_fecha_creacion desc")) {
+        try (PreparedStatement stmt = cn.prepareStatement("SELECT p.*, c.categoria_descripcion from productos p inner join categorias c on p.categoria_id = c.categoria_id where c.categoria_genero=? order by p.producto_fecha_creacion desc limit 6")) {
             stmt.setInt(1, genero);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Producto producto = getProducto(rs);
+                    productos.add(producto);
+                }
+            }
+        }
+        return productos;
+    }
+
+    public List<Producto> findBestSellers() throws SQLException, ClassNotFoundException {
+        Connection cn = Conexion.getConexion();
+        List<Producto> productos = new ArrayList<>();
+        try (PreparedStatement stmt = cn.prepareStatement("SELECT p.*, c.categoria_descripcion " +
+                "FROM productos p INNER JOIN categorias c ON p.categoria_id = c.categoria_id " +
+                "INNER JOIN detalle_ordenes d ON p.producto_id = d.producto_id GROUP BY " +
+                "d.producto_id ORDER BY SUM(d.detalle_orden_cantidad) desc")) {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Producto producto = getProducto(rs);

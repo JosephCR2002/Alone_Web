@@ -229,8 +229,7 @@ public class OrdenServlet extends HttpServlet {
 
     public void deleteOrden(HttpServletRequest request, HttpServletResponse response) throws SQLException, ClassNotFoundException, ServletException, IOException {
         Integer id = UsuariosServlet.getId(request);
-        int productoId = Integer.parseInt(request.getParameter("productoId"));
-        detalleOrdenDAO.delete(id,productoId);
+        ordenDAO.delete(id);
 
         this.viewList(request, response);
     }

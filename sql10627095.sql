@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.7.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 11-05-2023 a las 01:57:17
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Servidor: sql10.freesqldatabase.com
+-- Tiempo de generación: 20-06-2023 a las 00:26:39
+-- Versión del servidor: 5.5.62-0ubuntu0.14.04.1
+-- Versión de PHP: 7.0.33-0ubuntu0.16.04.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `alone_db`
+-- Base de datos: `sql10627095`
 --
 
 -- --------------------------------------------------------
@@ -92,7 +93,7 @@ INSERT INTO `detalle_ordenes` (`orden_id`, `producto_id`, `detalle_orden_precio`
 CREATE TABLE `ordenes` (
   `orden_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `orden_fecha_creacion` datetime NOT NULL DEFAULT current_timestamp()
+  `orden_fecha_creacion` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -124,8 +125,8 @@ CREATE TABLE `productos` (
   `producto_descripcion` varchar(250) NOT NULL,
   `producto_imagen` varchar(250) NOT NULL,
   `producto_estado` tinyint(1) NOT NULL,
-  `producto_inventario` int(11) NOT NULL,
-  `producto_fecha_creacion` datetime NOT NULL DEFAULT current_timestamp()
+  `producto_inventario` int(11) DEFAULT NULL,
+  `producto_fecha_creacion` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -146,7 +147,8 @@ INSERT INTO `productos` (`producto_id`, `categoria_id`, `producto_precio`, `prod
 (11, 11, '55', 'Vestido blanco verano', 'https://i.pinimg.com/236x/a9/44/c0/a944c099292980601fc7633083975716.jpg', 0, 0, '2022-12-07 19:40:57'),
 (12, 12, '64', 'Chompa tejida', 'https://www.estilos.com.pe/203550-home_default/chompa-hilo-jaydy-.jpg', 0, 0, '2022-12-07 19:40:57'),
 (13, 13, '85', 'Enterizo vino ', 'https://cf.shopee.com.mx/file/5fee2794dbfe024fcf26ab4fd9e52d64_tn', 0, 0, '2022-12-07 19:40:57'),
-(14, 14, '75', 'Enterizo de baño amarrillo', 'https://cf.shopee.com.mx/file/51817e764b1d748994c1426bf93f5848_tn', 0, 0, '2022-12-07 19:40:57');
+(14, 14, '75', 'Enterizo de baño amarrillo', 'https://cf.shopee.com.mx/file/51817e764b1d748994c1426bf93f5848_tn', 0, 0, '2022-12-07 19:40:57'),
+(15, 2, '85', 'Polera Deportiva', 'https://oechsle.vteximg.com.br/arquivos/ids/14320215-1500-1500/2183580.jpg?v=638167703962800000', 0, 5, '2023-06-19 19:23:56');
 
 -- --------------------------------------------------------
 
@@ -161,7 +163,7 @@ CREATE TABLE `usuarios` (
   `usuario_email` varchar(250) NOT NULL,
   `usuario_nivel` tinyint(1) NOT NULL,
   `usuario_password` varchar(250) NOT NULL,
-  `usuario_fecha_creacion` datetime NOT NULL DEFAULT current_timestamp()
+  `usuario_fecha_creacion` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -178,7 +180,14 @@ INSERT INTO `usuarios` (`usuario_id`, `usuario_nombre`, `usuario_telefono`, `usu
 (7, 'Carlos	Alavedra \r\n', '924750033', 'carlos123@gmail.com', 1, 'carlos123', '2022-12-07 18:10:18'),
 (8, 'Alejandro	Arenas \r\n', '999152672', 'aleare@gmail.com', 1, 'ale123', '2022-12-07 18:12:02'),
 (9, 'Pedro	Arias\r\n', '914413504', 'ped123@gmail.com', 1, 'ped123', '2022-12-07 18:12:02'),
-(10, 'Douglas	Bernizon \r\n', '955003698', 'dou123b@gmail.com', 1, 'dou123', '2022-12-07 18:13:03');
+(10, 'Douglas	Bernizon \r\n', '955003698', 'dou123b@gmail.com', 1, 'dou123', '2022-12-07 18:13:03'),
+(12, 'alvaro', '56756765', 'zz@gmail.com', 0, 'sdf3232', '2023-06-18 19:22:40'),
+(13, 'Pedro', '956456543', 'pedro@gmail.com', 0, '1234', '2023-06-19 00:48:47'),
+(14, 'Gilberto', '954732345', 'gilberto@gmail.com', 0, '1234', '2023-06-19 00:48:47'),
+(15, 'MARCO', '122334445', 'alo@gmail.com', 0, 'de12', '2023-06-18 19:22:40'),
+(16, 'franco', '23423525', 'assa@gmail.com', 0, '32fr23r23', '2023-06-18 19:22:40'),
+(17, 'Fortunato', '946321857', 'fortunato@gmail.com', 0, '1234', '2023-06-19 23:47:58'),
+(18, 'Cavero', '957321748', 'cavero@gmail.com', 1, '1234', '2023-06-22 00:00:00');
 
 --
 -- Índices para tablas volcadas
@@ -227,48 +236,21 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `categorias`
   MODIFY `categoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
 --
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
   MODIFY `orden_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `producto_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
+  MODIFY `producto_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `detalle_ordenes`
---
-ALTER TABLE `detalle_ordenes`
-  ADD CONSTRAINT `detalle_ordenes_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`producto_id`),
-  ADD CONSTRAINT `detalle_ordenes_ibfk_2` FOREIGN KEY (`orden_id`) REFERENCES `ordenes` (`orden_id`);
-
---
--- Filtros para la tabla `ordenes`
---
-ALTER TABLE `ordenes`
-  ADD CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`usuario_id`);
-
---
--- Filtros para la tabla `productos`
---
-ALTER TABLE `productos`
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`categoria_id`);
-COMMIT;
+  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

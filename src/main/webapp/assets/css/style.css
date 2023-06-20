@@ -333,12 +333,6 @@ html {
     padding: 1rem 0 !important;
 }
 
-@media screen and (max-width: 1200px) {
-    .card-btns {
-        flex-direction: column !important;
-    }
-}
-
 /*--------------------------------------------------------------
 # Sidebar
 --------------------------------------------------------------*/
@@ -525,5 +519,14 @@ html {
 @media screen and (max-width: 700px) {
     .contenido{
         display: none;
+    }
+}
+
+/*--------------------------------------------------------------
+# Carrito
+--------------------------------------------------------------*/
+@media (min-width: 1025px) {
+    .h-custom {
+        height: 100vh !important;
     }
 }

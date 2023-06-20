@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class Conexion {
     
-    private static String url = "jdbc:mysql://localhost:3306/alone_db?serverTimezone=America/Lima";
-    private static String username = "root";
-    private static String password = "";
+    private static String url = "jdbc:mysql://sql10.freesqldatabase.com/sql10627095";
+    private static String username = "sql10627095";
+    private static String password = "MVhdXSVEhB";
         
     public static Connection getConexion() throws SQLException, ClassNotFoundException{
             Class.forName("com.mysql.jdbc.Driver");
