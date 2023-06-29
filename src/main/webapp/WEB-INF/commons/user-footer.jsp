@@ -11,6 +11,7 @@
                 <div class="col-6 footer-links">
                     <h4>Nuestras Redes Sociales</h4>
                     <div class="socail-links mt-3">
+                        
                         <a href="https://www.facebook.com/aloneventas/?ref=page_internal" target="_blank" class="twiiter"><i class="fa-brands fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/aloneventas/" target="_blank" class="twiiter"><i class="fa-brands fa-instagram"></i></a>
                     </div>
@@ -35,5 +36,6 @@
         <a href="https://www.instagram.com/aloneventas/" target="_blank" class="bi bi-instagram">
             <span id="title">Instagram</span>
         </a>
+        
     </div>
 </div>

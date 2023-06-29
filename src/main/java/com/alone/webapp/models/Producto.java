@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Producto {
+
     @Expose
     private Integer id;
     @Expose

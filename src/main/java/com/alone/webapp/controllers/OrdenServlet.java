@@ -24,7 +24,7 @@ public class OrdenServlet extends HttpServlet {
     private DetalleOrdenDAO detalleOrdenDAO = new DetalleOrdenDAO();
     private ProductoDAO productoDAO = new ProductoDAO();
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String view = request.getParameter("view");
@@ -69,16 +69,16 @@ public class OrdenServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        OrdenDAO ordenDAO = new OrdenDAO();
         boolean methodSuccess;
         String msg = "";
         String action = request.getParameter("action");
+
         if (action != null) {
             switch (action) {
                 case "add":
                     try {
                         msg = "'\u00A1Error al a\u00f1adir la orde!'";
-                        methodSuccess = addOrden(request);
+                        methodSuccess = addOrden(request, productoDAO, usuarioDAO, ordenDAO, detalleOrdenDAO);
                         if (methodSuccess) {
                             msg = "'\u00a1Orden a\u00f1adida con \u00e9xito!'";
                         }
@@ -118,9 +118,9 @@ public class OrdenServlet extends HttpServlet {
 
     private void viewAddForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, ClassNotFoundException {
         List<Usuario> usuarios = usuarioDAO.findAll();
-        request.setAttribute("usuarios",usuarios);
+        request.setAttribute("usuarios", usuarios);
         List<Producto> productos = productoDAO.findAll();
-        request.setAttribute("productos",productos);
+        request.setAttribute("productos", productos);
 
         //Hallar la id minima de usuario para dejarlo como seleccionado por defecto
         ArrayList<Integer> usuariosId = new ArrayList<>();
@@ -144,40 +144,55 @@ public class OrdenServlet extends HttpServlet {
         request.setAttribute("orden", orden);
 
         List<Usuario> usuarios = usuarioDAO.findAll();
-        request.setAttribute("usuarios",usuarios);
+        request.setAttribute("usuarios", usuarios);
         List<Producto> productos = productoDAO.findAll();
-        request.setAttribute("productos",productos);
+        request.setAttribute("productos", productos);
 
         String updateForm = "/WEB-INF/dashboard/ordenes/editar-formulario.jsp";
         request.getRequestDispatcher(updateForm).forward(request, response);
     }
 
-    private boolean addOrden(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+    private static boolean addOrden(HttpServletRequest request, ProductoDAO productoDAO, UsuarioDAO usuarioDAO, OrdenDAO ordenDAO, DetalleOrdenDAO detalleOrdenDAO) throws SQLException, ClassNotFoundException {
         int usuarioId = Integer.parseInt(request.getParameter("usuarioId"));
         int productoId = Integer.parseInt(request.getParameter("productoId"));
         int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+
+        // se hace la orden y devuelve el id
+        int ordenId = setOrden(usuarioDAO, ordenDAO, usuarioId);
+
+        return paymentWentGood(productoDAO, detalleOrdenDAO, productoId, ordenId, cantidad);
+    }
+
+    public static int setOrden(UsuarioDAO usuarioDAO, OrdenDAO ordenDAO, int usuarioId) throws SQLException, ClassNotFoundException {
         LocalDateTime fechaCreacion = LocalDateTime.now();
 
-        //Se encuentra el usuario y el producto de la base de datos
-        Producto producto = productoDAO.findById(productoId);
+        //Se encuentra el usuario de la base de datos
         Usuario usuario = usuarioDAO.findById(usuarioId);
+
+        //Se crean los modelos
+        DetalleOrden detalleOrden = new DetalleOrden();
+        Orden orden = new Orden(usuario, new Producto(), new DetalleOrden(), fechaCreacion);
+
+        //Se crea la orden
+        ordenDAO.add(orden);
+
+        //Se devuelve la id de la orden
+        return ordenDAO.findId(usuarioId, fechaCreacion);
+    }
+
+    public static boolean paymentWentGood(ProductoDAO productoDAO, DetalleOrdenDAO detalleOrdenDAO, int productoId, int ordenId, int cantidad) throws SQLException, ClassNotFoundException {
+        //Se encuentra el producto de la base de datos
+        Producto producto = productoDAO.findById(productoId);
 
         //Se calcula el precio
         double precio = (producto.getPrecio().doubleValue()) * cantidad;
 
         //Se crean los modelos
         DetalleOrden detalleOrden = new DetalleOrden();
-        Orden orden = new Orden(usuario,producto,detalleOrden,fechaCreacion);
 
         //Se crea la respuesta
         boolean msg = false;
         try {
-            //Se crea la orden
-            ordenDAO.add(orden);
-
-            //Se obtiene la id de la orden
-            Integer ordenId = ordenDAO.findId(usuarioId,fechaCreacion);
-
             //Se le pasan los datos al modelo
             detalleOrden.setId(ordenId);
             detalleOrden.setProducto(producto);
@@ -193,7 +208,7 @@ public class OrdenServlet extends HttpServlet {
         return msg;
     }
 
-    private boolean updateOrden(HttpServletRequest request) throws SQLException, ClassNotFoundException{
+    private boolean updateOrden(HttpServletRequest request) throws SQLException, ClassNotFoundException {
         int usuarioId = Integer.parseInt(request.getParameter("usuarioId"));
         int productoId = Integer.parseInt(request.getParameter("productoId"));
         int cantidad = Integer.parseInt(request.getParameter("cantidad"));
@@ -209,8 +224,8 @@ public class OrdenServlet extends HttpServlet {
         double precio = (producto.getPrecio().doubleValue()) * cantidad;
 
         //Se crean los modelos
-        DetalleOrden detalleOrden = new DetalleOrden(id,producto,precio,cantidad);
-        Orden orden = new Orden(id,usuario,producto,detalleOrden,fechaCreacion);
+        DetalleOrden detalleOrden = new DetalleOrden(id, producto, precio, cantidad);
+        Orden orden = new Orden(id, usuario, producto, detalleOrden, fechaCreacion);
 
         //Se crea la respuesta
         boolean msg = false;
@@ -219,7 +234,7 @@ public class OrdenServlet extends HttpServlet {
             ordenDAO.add(orden);
 
             //Se actualiza el detalle
-            detalleOrdenDAO.update(detalleOrden,oldId);
+            detalleOrdenDAO.update(detalleOrden, oldId);
             msg = true;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

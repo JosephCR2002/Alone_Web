@@ -69,6 +69,7 @@
 
 <%@include file="/WEB-INF/commons/user-footer-imports.jsp" %>
 <script src="${pageContext.request.contextPath}/assets/js/cart/cart.js?v=1.99"></script>
+<script src="${pageContext.request.contextPath}/assets/js/cart/payment.js?v=1"></script>
 
 </body>
 </html>

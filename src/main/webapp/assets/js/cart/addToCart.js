@@ -11,6 +11,7 @@ const addProduct = async (id) => {
     const res = await fetch('cart?action=find&id=' + id);
     const data = await res.json()
     setCarrito(data)
+    console.log(carrito)
     alert("¡Producto añadido al carrito!")
 }
 
