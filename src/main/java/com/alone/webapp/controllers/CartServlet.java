@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "CartServlet", value = "/cart")
@@ -117,7 +118,9 @@ public class CartServlet extends HttpServlet {
         return gson.toJson(producto);
     }
 
-    private void redirectToCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void redirectToCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, ClassNotFoundException {
+        List<Producto> productosTop = productoDAO.findBestSellers();
+        request.setAttribute("productosTop",productosTop);
         getServletContext().getRequestDispatcher("/WEB-INF/user/cart/cart.jsp").forward(request, response);
     }
 

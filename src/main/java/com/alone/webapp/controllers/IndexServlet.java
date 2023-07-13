@@ -42,9 +42,6 @@ public class IndexServlet extends HttpServlet {
         List<Producto> productosMujer = productoDAO.findByGender(1);
         request.setAttribute("productosMujer",productosMujer);
 
-        List<Producto> productosTop = productoDAO.findBestSellers();
-        request.setAttribute("productosTop",productosTop);
-
         getServletContext().getRequestDispatcher("/WEB-INF/user/index.jsp").forward(request,response);
     }
 }

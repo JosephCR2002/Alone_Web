@@ -44,7 +44,7 @@ public class ProductoDAO implements DAO<Producto> {
         try (PreparedStatement stmt = cn.prepareStatement("SELECT p.*, c.categoria_descripcion " +
                 "FROM productos p INNER JOIN categorias c ON p.categoria_id = c.categoria_id " +
                 "INNER JOIN detalle_ordenes d ON p.producto_id = d.producto_id GROUP BY " +
-                "d.producto_id ORDER BY SUM(d.detalle_orden_cantidad) desc")) {
+                "d.producto_id ORDER BY SUM(d.detalle_orden_cantidad) desc limit 3")) {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Producto producto = getProducto(rs);
